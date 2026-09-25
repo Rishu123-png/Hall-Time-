@@ -29,9 +29,7 @@ In Display, copy **Share this board**. The school name and theme are in the link
 
 `https://your-site.example/?school=Your%20School&theme=daylight&lang=hi`
 
-## Put it online
 
-Upload this folder to any static host (Cloudflare Pages, Netlify, GitHub Pages, or the school server). No build step. After the page has loaded once, the clock keeps running if the internet drops.
 
 ## Keys
 
