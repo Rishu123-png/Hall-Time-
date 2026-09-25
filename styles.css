@@ -598,6 +598,24 @@ html[data-phase="danger"] .instruction { color: var(--warn); }
   pointer-events: none;
   transition: opacity 0.3s;
 }
+.maker {
+  position: fixed;
+  left: 28px;
+  bottom: 16px;
+  z-index: 14;
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  pointer-events: none;
+}
+.maker-note {
+  margin: 22px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+}
 .idle-hint[hidden] { display: none; }
 
 .safe-frame {
