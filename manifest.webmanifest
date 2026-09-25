@@ -1,0 +1,16 @@
+{
+  "name": "HALLTIME Exam Hall Clock",
+  "short_name": "HALLTIME",
+  "description": "Fullscreen digital clock for examination halls.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "fullscreen",
+  "background_color": "#101410",
+  "theme_color": "#101410",
+  "lang": "en",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
