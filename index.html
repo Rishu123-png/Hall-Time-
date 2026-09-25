@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="blackboard">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Digital Clock Online — Fullscreen Exam Hall Clock</title>
+  <meta name="description" content="Free digital clock with seconds. Open fullscreen on a classroom projector or exam hall screen. Reading time, writing countdown, and CBSE morning schedule. No login.">
+  <meta name="theme-color" id="themeColor" content="#101410">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta property="og:title" content="Digital Clock Online — Fullscreen Exam Hall Clock">
+  <meta property="og:description" content="Free digital clock with seconds for classrooms and exam halls. Fullscreen, reading time, and countdown. No login.">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="preload" href="fonts/barlow-condensed-800.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/barlow-500.woff2" as="font" type="font/woff2" crossorigin>
+  <script>
+    try {
+      var saved = JSON.parse(localStorage.getItem("halltime-v1") || "{}").settings || {};
+      var q = new URLSearchParams(location.search);
+      var theme = q.get("theme") || saved.theme || "blackboard";
+      var themes = ["blackboard", "daylight", "amber", "green", "red"];
+      if (themes.indexOf(theme) === -1) theme = "blackboard";
+      document.documentElement.setAttribute("data-theme", theme);
+      var lang = q.get("lang") || saved.lang || "en";
+      document.documentElement.lang = lang === "hi" ? "hi" : "en";
+    } catch (e) {}
+  </script>
+  <style>html{background:#101410}html[data-theme="daylight"]{background:#f3efe4}html[data-theme="amber"]{background:#0c0a07}html[data-theme="green"]{background:#06110b}html[data-theme="red"]{background:#120707}</style>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="bezel" aria-hidden="true"><i class="c1"></i><i class="c2"></i><i class="c3"></i><i class="c4"></i></div>
+  <header class="top">
+    <div class="brand" id="brand">
+      <svg class="mark" viewBox="0 0 32 32" aria-hidden="true">
+        <rect width="32" height="32" rx="8" fill="currentColor" opacity="0.16"></rect>
+        <g fill="currentColor">
+          <rect x="7" y="6" width="4.2" height="20" rx="1.2"></rect>
+          <rect x="20.8" y="6" width="4.2" height="20" rx="1.2"></rect>
+          <rect x="7" y="13.9" width="18" height="4.2" rx="1.2"></rect>
+        </g>
+      </svg>
+      <span class="brand-name" id="brandName">HALLTIME</span>
+    </div>
+    <div class="school" id="schoolLine"></div>
+    <div class="top-right"><span class="pip" id="pip"></span><span id="tzLine">IST</span></div>
+  </header>
+
+  <main id="stage">
+    <div class="cluster">
+      <p class="paper" id="paperLine" hidden></p>
+      <p class="kicker" id="kicker" hidden></p>
+      <p class="kicker-hi" id="kickerHi" hidden></p>
+      <div class="hero" id="hero"></div>
+      <p class="hero-sub" id="heroSub" hidden></p>
+      <p class="instruction" id="instruction" hidden></p>
+      <div class="rule" id="rule"></div>
+      <div class="stats" id="stats" hidden></div>
+      <p class="date-line" id="dateLine"></p>
+      <p class="notice-line" id="noticeLine" hidden></p>
+    </div>
+  </main>
+
+  <div class="banner" id="banner" hidden></div>
+  <div class="progress" id="progress" hidden role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+    <span id="progressFill"></span>
+  </div>
+  <p class="idle-hint" id="idleHint"></p>
+  <div class="safe-frame" id="safeFrame" aria-hidden="true"><span></span></div>
+  <div class="sr-only" id="live" aria-live="polite"></div>
+
+  <div class="dock" id="dock">
+    <button type="button" id="btnFull">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M8 4H4v4M16 4h4v4M4 16v4h4M20 16v4h-4"></path></svg>
+      <span id="fullLabel"></span>
+    </button>
+    <button type="button" id="btnExam" class="primary">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5-11-6.5z"></path></svg>
+      <span id="examLabel"></span>
+    </button>
+    <button type="button" id="btnPause" hidden>
+      <span id="pauseLabel"></span>
+    </button>
+    <button type="button" id="btnAdd" hidden><span id="addLabel"></span></button>
+    <button type="button" id="btnDisplay">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M18.4 5.6 17 7M7 17l-1.4 1.4"></path></svg>
+      <span id="displayLabel"></span>
+    </button>
+  </div>
+
+  <div class="scrim" id="scrim" hidden></div>
+  <aside class="sheet" id="sheet" aria-hidden="true">
+    <div class="sheet-head">
+      <h2 id="sheetTitle"></h2>
+      <button type="button" class="icon-btn" id="sheetClose" aria-label="Close">×</button>
+    </div>
+    <div class="sheet-scroll">
+      <div id="panelStart">
+        <div class="quick">
+          <button type="button" id="q1h"><span data-i18n="q1h"></span><small data-i18n="q1hSub"></small></button>
+          <button type="button" id="q3h"><span data-i18n="q3h"></span><small data-i18n="q3hSub"></small></button>
+          <button type="button" id="qCbse"><span data-i18n="qCbse"></span><small data-i18n="qCbseSub"></small></button>
+        </div>
+        <p class="or" data-i18n="orSet"></p>
+        <label class="field">
+          <span data-i18n="school"></span>
+          <input id="schoolInputStart" type="text" maxlength="60" autocomplete="organization">
+        </label>
+        <label class="field">
+          <span data-i18n="paper"></span>
+          <input id="paperInput" type="text" maxlength="80" autocomplete="off">
+        </label>
+        <div class="segctrl" id="scheduleToggle">
+          <button type="button" id="scheduleNow" class="on" aria-pressed="true" data-i18n="startNow"></button>
+          <button type="button" id="scheduleTimed" aria-pressed="false" data-i18n="setTimes"></button>
+        </div>
+        <div id="nowFields">
+          <p class="group-label" data-i18n="reading"></p>
+          <div class="chips" id="readingChips">
+            <button type="button" data-min="0"></button>
+            <button type="button" data-min="5"></button>
+            <button type="button" data-min="10"></button>
+            <button type="button" data-min="15" class="on" aria-pressed="true"></button>
+            <button type="button" data-min="20"></button>
+          </div>
+          <p class="group-label" data-i18n="writingDur" style="margin-top:14px"></p>
+          <div class="chips" id="writingChips">
+            <button type="button" data-min="45"></button>
+            <button type="button" data-min="60"></button>
+            <button type="button" data-min="90"></button>
+            <button type="button" data-min="120"></button>
+            <button type="button" data-min="150"></button>
+            <button type="button" data-min="180" class="on" aria-pressed="true"></button>
+          </div>
+          <div class="custom-line">
+            <label for="writingCustom" data-i18n="customMin"></label>
+            <input id="writingCustom" type="number" inputmode="numeric" min="5" max="360" step="5" placeholder="—">
+          </div>
+        </div>
+        <div id="timedFields" hidden>
+          <p class="hint" data-i18n="timeHint"></p>
+          <label class="checkline">
+            <input type="checkbox" id="useReading" checked>
+            <span data-i18n="includeReading"></span>
+          </label>
+          <label class="field" id="readingTimeField">
+            <span data-i18n="readingStarts"></span>
+            <input type="time" id="readingAt" value="10:15">
+          </label>
+          <label class="field">
+            <span data-i18n="writingStarts"></span>
+            <input type="time" id="writingAt" value="10:30">
+          </label>
+          <label class="field">
+            <span data-i18n="writingEnds"></span>
+            <input type="time" id="endAt" value="13:30">
+          </label>
+        </div>
+        <p class="group-label" data-i18n="extra" style="margin-top:16px"></p>
+        <div class="extra-row">
+          <button type="button" class="stepper" id="extraMinus" aria-label="-5">−</button>
+          <input id="extraInput" type="number" inputmode="numeric" min="0" max="180" value="0">
+          <span data-i18n="minutes"></span>
+          <button type="button" class="stepper" id="extraPlus" aria-label="+5">+</button>
+        </div>
+        <div class="chips" id="extraChips">
+          <button type="button" data-extra="0">0</button>
+          <button type="button" data-extra="15">+15</button>
+          <button type="button" data-extra="20">+20</button>
+          <button type="button" data-extra="30">+30</button>
+          <button type="button" data-extra="60">+60</button>
+          <button type="button" data-extra="25%">+25%</button>
+          <button type="button" data-extra="50%">+50%</button>
+        </div>
+        <p class="hint" data-i18n="extraHint"></p>
+        <label class="checkline">
+          <input type="checkbox" id="bellsOn" checked>
+          <span data-i18n="bells"></span>
+        </label>
+        <p class="hint" data-i18n="bellsHint"></p>
+        <p class="hint" id="modeHint"></p>
+      </div>
+
+      <div id="panelRunning" hidden>
+        <div class="status-card">
+          <span class="ctrl-phase" id="ctrlPhase"></span>
+          <span class="ctrl-remain" id="ctrlRemain">00:00:00</span>
+        </div>
+        <label class="field">
+          <span data-i18n="paper"></span>
+          <input id="ctrlPaper" type="text" maxlength="80" autocomplete="off">
+        </label>
+        <p class="group-label" data-i18n="addTime"></p>
+        <div class="chips" id="addChips">
+          <button type="button" data-add="5">+5</button>
+          <button type="button" data-add="10">+10</button>
+          <button type="button" data-add="15">+15</button>
+          <button type="button" data-add="30">+30</button>
+        </div>
+        <div class="extra-row" style="margin-top:10px">
+          <input id="addCustom" type="number" inputmode="numeric" min="1" max="60" value="5">
+          <button type="button" class="btn ghost" id="btnAddCustom" data-i18n="addCustom"></button>
+        </div>
+        <div class="stack">
+          <button type="button" class="btn ghost" id="btnPause2"></button>
+          <button type="button" class="btn ghost" id="btnTest" data-i18n="testBell"></button>
+          <button type="button" class="btn danger" id="btnEnd" data-i18n="endYes"></button>
+        </div>
+      </div>
+
+      <div id="panelDisplay" hidden>
+        <p class="group-label" data-i18n="theme"></p>
+        <div class="swatches" id="themeSwatches">
+          <button type="button" class="swatch" data-theme="blackboard"><i></i><span data-i18n="blackboard"></span></button>
+          <button type="button" class="swatch" data-theme="daylight"><i></i><span data-i18n="daylight"></span></button>
+          <button type="button" class="swatch" data-theme="amber"><i></i><span data-i18n="amber"></span></button>
+          <button type="button" class="swatch" data-theme="green"><i></i><span data-i18n="green"></span></button>
+          <button type="button" class="swatch" data-theme="red"><i></i><span data-i18n="red"></span></button>
+        </div>
+        <p class="hint" data-i18n="themeHint"></p>
+
+        <p class="group-label" data-i18n="digits" style="margin-top:16px"></p>
+        <div class="choice" id="digitChoice">
+          <button type="button" id="digitPlain" data-i18n="plain"></button>
+          <button type="button" id="digitLed" data-i18n="led"></button>
+        </div>
+        <p class="hint" data-i18n="digitHint"></p>
+
+        <p class="group-label" data-i18n="clock" style="margin-top:16px"></p>
+        <div class="choice" id="hourChoice">
+          <button type="button" id="hour12" data-i18n="h12"></button>
+          <button type="button" id="hour24" data-i18n="h24"></button>
+        </div>
+        <label class="checkline"><input type="checkbox" id="optSeconds"><span data-i18n="seconds"></span></label>
+        <label class="checkline"><input type="checkbox" id="optBlink"><span data-i18n="blink"></span></label>
+        <label class="checkline"><input type="checkbox" id="optDate"><span data-i18n="showDate"></span></label>
+        <label class="checkline"><input type="checkbox" id="optBilingual"><span data-i18n="bilingual"></span></label>
+
+        <p class="group-label" data-i18n="language" style="margin-top:8px"></p>
+        <div class="choice" id="langChoice">
+          <button type="button" id="langEn">English</button>
+          <button type="button" id="langHi">हिन्दी</button>
+        </div>
+
+        <label class="field" style="margin-top:16px">
+          <span data-i18n="school"></span>
+          <input id="schoolInput" type="text" maxlength="60" autocomplete="organization">
+        </label>
+        <label class="field">
+          <span data-i18n="notice"></span>
+          <input id="noticeInput" type="text" maxlength="90" autocomplete="off">
+        </label>
+        <label class="field">
+          <span data-i18n="brand"></span>
+          <input id="brandInput" type="text" maxlength="16" autocomplete="off">
+        </label>
+        <label class="checkline"><input type="checkbox" id="optHideBrand"><span data-i18n="hideBrand"></span></label>
+
+        <p class="group-label" data-i18n="sound" style="margin-top:8px"></p>
+        <label class="checkline"><input type="checkbox" id="optSound"><span data-i18n="bells"></span></label>
+        <div class="choice" id="volChoice">
+          <button type="button" id="volQuiet" data-i18n="quiet"></button>
+          <button type="button" id="volRoom" data-i18n="room"></button>
+          <button type="button" id="volLoud" data-i18n="loud"></button>
+        </div>
+        <div class="block">
+          <label class="checkline"><input type="checkbox" id="bellReading"><span data-i18n="bellReading"></span></label>
+          <label class="checkline"><input type="checkbox" id="bellStart"><span data-i18n="bellStart"></span></label>
+          <label class="checkline"><input type="checkbox" id="bellHourly"><span data-i18n="bellHourly"></span></label>
+          <label class="checkline"><input type="checkbox" id="bell15"><span data-i18n="bell15"></span></label>
+          <label class="checkline"><input type="checkbox" id="bell5"><span data-i18n="bell5"></span></label>
+          <label class="checkline"><input type="checkbox" id="bellEnd"><span data-i18n="bellEnd"></span></label>
+          <button type="button" class="btn ghost" id="btnTest2" data-i18n="testBell"></button>
+        </div>
+        <p class="hint" data-i18n="deviceNote"></p>
+        <p class="hint"><strong id="deviceTime"></strong></p>
+
+        <p class="group-label" data-i18n="shortcuts" style="margin-top:16px"></p>
+        <ul class="shorts">
+          <li><kbd>F</kbd><span data-i18n="scF"></span></li>
+          <li><kbd>E</kbd><span data-i18n="scE"></span></li>
+          <li><kbd>D</kbd><span data-i18n="scD"></span></li>
+          <li><kbd>Space</kbd><span data-i18n="scSpace"></span></li>
+          <li><kbd>+</kbd><span data-i18n="scPlus"></span></li>
+          <li><kbd>T</kbd><span data-i18n="scT"></span></li>
+          <li><kbd>L</kbd><span data-i18n="scL"></span></li>
+          <li><kbd>M</kbd><span data-i18n="scM"></span></li>
+          <li><kbd>Esc</kbd><span data-i18n="scEsc"></span></li>
+        </ul>
+
+        <div class="block" id="shareBox">
+          <p class="group-label" data-i18n="share"></p>
+          <div class="share">
+            <input id="shareUrl" type="text" readonly>
+            <button type="button" class="btn ghost" id="btnCopy" data-i18n="copy"></button>
+          </div>
+          <p class="hint" data-i18n="shareHint"></p>
+        </div>
+        <p class="hint" data-i18n="offline"></p>
+        <p class="hint" data-i18n="installHint"></p>
+      </div>
+    </div>
+    <footer class="sheet-foot" id="sheetFoot">
+      <p class="group-label" data-i18n="onTheBoard"></p>
+      <p class="summary" id="planSummary"></p>
+      <p class="error" id="planError" hidden></p>
+      <div class="sheet-actions">
+        <button type="button" class="btn ghost" id="examCancel" data-i18n="cancel"></button>
+        <button type="button" class="btn primary" id="examBegin" data-i18n="begin"></button>
+      </div>
+    </footer>
+  </aside>
+
+  <div class="dialog" id="dialog" aria-hidden="true">
+    <article role="alertdialog" aria-labelledby="dialogText">
+      <p id="dialogText"></p>
+      <div class="dialog-actions">
+        <button type="button" class="btn ghost" id="dialogKeep"></button>
+        <button type="button" class="btn danger" id="dialogEnd"></button>
+      </div>
+    </article>
+  </div>
+
+  <script src="app.js"></script>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a40b1c566bed33ba',t:'MTc5MDM1MDY1MQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
