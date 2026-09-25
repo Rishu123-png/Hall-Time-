@@ -23,11 +23,8 @@ This clock uses the computer’s clock. Match it to a phone before the exam.
 
 English or हिन्दी, from Display. Turn on “English and Hindi together” if the hall needs both.
 
-## Share a link
+## link :- hall-time.vercel.app
 
-In Display, copy **Share this board**. The school name and theme are in the link:
-
-`https://your-site.example/?school=Your%20School&theme=daylight&lang=hi`
 
 
 
