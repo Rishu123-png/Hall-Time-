@@ -1,5 +1,7 @@
 # HALLTIME
 
+Made by Rishu Jaswar.
+
 Fullscreen digital clock for examination halls. Open it on the projector or smart board instead of searching “digital clock”.
 
 ## For the invigilator
