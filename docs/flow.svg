@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 160" role="img" aria-label="Exam phases">
+  <defs>
+    <style>
+      .dot { animation: hop 3.6s ease-in-out infinite; }
+      @keyframes hop { 0%{cx:90} 25%{cx:300} 55%{cx:530} 80%{cx:760} 100%{cx:90} }
+      .glow { animation: g 3.6s ease-in-out infinite; }
+    </style>
+  </defs>
+  <rect width="920" height="160" rx="20" fill="#101410"/>
+  <line x1="90" y1="72" x2="760" y2="72" stroke="#3d5a32" stroke-width="4"/>
+  <circle cx="90" cy="72" r="14" fill="#2a3d24" stroke="#9ecf4a" stroke-width="3"/>
+  <circle cx="300" cy="72" r="14" fill="#2a3d24" stroke="#9ecf4a" stroke-width="3"/>
+  <circle cx="530" cy="72" r="14" fill="#2a3d24" stroke="#9ecf4a" stroke-width="3"/>
+  <circle cx="760" cy="72" r="14" fill="#2a3d24" stroke="#c45c5c" stroke-width="3"/>
+  <circle class="dot" cx="90" cy="72" r="8" fill="#d4f08a"/>
+  <text x="90" y="118" text-anchor="middle" fill="#c9d6b8" font-family="ui-sans-serif,system-ui,sans-serif" font-size="15">Wait</text>
+  <text x="300" y="118" text-anchor="middle" fill="#c9d6b8" font-family="ui-sans-serif,system-ui,sans-serif" font-size="15">Reading</text>
+  <text x="530" y="118" text-anchor="middle" fill="#c9d6b8" font-family="ui-sans-serif,system-ui,sans-serif" font-size="15">Writing</text>
+  <text x="760" y="118" text-anchor="middle" fill="#e8b4b4" font-family="ui-sans-serif,system-ui,sans-serif" font-size="15">Time up</text>
+  <text x="40" y="36" fill="#9ecf4a" font-family="ui-monospace,monospace" font-size="12" letter-spacing="3">PHASE TRAVEL  ·  PAUSE FREEZES THE COUNTDOWN ONLY</text>
+</svg>
