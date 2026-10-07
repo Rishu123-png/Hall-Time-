@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 120" role="img" aria-label="Keyboard shortcuts">
+  <defs>
+    <style>
+      .k { font-family: ui-sans-serif, system-ui, sans-serif; }
+      .key { animation: pop 2.8s ease-in-out infinite; }
+      .key:nth-child(2) { animation-delay: .2s }
+      .key:nth-child(3) { animation-delay: .4s }
+      .key:nth-child(4) { animation-delay: .6s }
+      .key:nth-child(5) { animation-delay: .8s }
+      .key:nth-child(6) { animation-delay: 1s }
+      .key:nth-child(7) { animation-delay: 1.2s }
+      .key:nth-child(8) { animation-delay: 1.4s }
+      @keyframes pop {
+        0%,100% { transform: translateY(0); filter: brightness(1); }
+        40% { transform: translateY(-4px); filter: brightness(1.25); }
+      }
+    </style>
+  </defs>
+  <rect width="920" height="120" rx="20" fill="#101410"/>
+  <g class="k" font-size="13" fill="#d7e4c8">
+    <g class="key" transform="translate(24,28)"><rect width="96" height="64" rx="12" fill="#1c241c" stroke="#3d5a32"/><text x="48" y="28" text-anchor="middle" font-size="18" fill="#9ecf4a">F</text><text x="48" y="48" text-anchor="middle">Fullscreen</text></g>
+    <g class="key" transform="translate(136,28)"><rect width="96" height="64" rx="12" fill="#1c241c" stroke="#3d5a32"/><text x="48" y="28" text-anchor="middle" font-size="18" fill="#9ecf4a">E</text><text x="48" y="48" text-anchor="middle">Exam</text></g>
+    <g class="key" transform="translate(248,28)"><rect width="96" height="64" rx="12" fill="#1c241c" stroke="#3d5a32"/><text x="48" y="28" text-anchor="middle" font-size="18" fill="#9ecf4a">D</text><text x="48" y="48" text-anchor="middle">Display</text></g>
+    <g class="key" transform="translate(360,28)"><rect width="120" height="64" rx="12" fill="#1c241c" stroke="#3d5a32"/><text x="60" y="28" text-anchor="middle" font-size="16" fill="#9ecf4a">Space</text><text x="60" y="48" text-anchor="middle">Pause</text></g>
+    <g class="key" transform="translate(496,28)"><rect width="88" height="64" rx="12" fill="#1c241c" stroke="#3d5a32"/><text x="44" y="28" text-anchor="middle" font-size="18" fill="#9ecf4a">+</text><text x="44" y="48" text-anchor="middle">+5 min</text></g>
+    <g class="key" transform="translate(600,28)"><rect width="88" height="64" rx="12" fill="#1c241c" stroke="#3d5a32"/><text x="44" y="28" text-anchor="middle" font-size="18" fill="#9ecf4a">T</text><text x="44" y="48" text-anchor="middle">Theme</text></g>
+    <g class="key" transform="translate(704,28)"><rect width="88" height="64" rx="12" fill="#1c241c" stroke="#3d5a32"/><text x="44" y="28" text-anchor="middle" font-size="18" fill="#9ecf4a">L</text><text x="44" y="48" text-anchor="middle">Language</text></g>
+    <g class="key" transform="translate(808,28)"><rect width="88" height="64" rx="12" fill="#1c241c" stroke="#3d5a32"/><text x="44" y="28" text-anchor="middle" font-size="18" fill="#9ecf4a">M</text><text x="44" y="48" text-anchor="middle">Mute</text></g>
+  </g>
+</svg>
